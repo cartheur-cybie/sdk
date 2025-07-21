@@ -1,4 +1,4 @@
-# sdk
+# iCybie sdk
 
 Software development kit for the iCybie. Repository navigation:
 
