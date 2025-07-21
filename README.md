@@ -73,7 +73,7 @@ Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be r
 
         NOTE: source is not available to many critical tools
     
-`BIN TOOLS`: Most tools are automatically handled for you by the standard makefile "INC\ICSTD.MAK"
+`BIN TOOLS`: Most tools are automatically handled for you by the standard makefile "INC\ICSTD.MAK".
 
     NMAKE.EXE - Microsoft NMAKE utility
 
@@ -97,14 +97,11 @@ Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be r
             [ to include sounds in your program ]
     adpcm66.exe - convert 16bit (8kHz) WAV files to 4bit ADPCM
 
-Tools without source are publicly available AFAIK, with copyright held by the appropriate parties. Tools with source are my own creation and are freeware (both source and binary)
+Tools without source are publicly available AFAIK, with copyright held by the appropriate parties. Tools with source are my own creation and are freeware in both source and binary forms.
 
 ### ICSDK2 ALPHA RELEASE NOTES:
 
-This release provides low level services for the ICybie robot. It is not complete, nor does it have a working "personality".
-
-If you want a tool for customizing complete personalities, use YICT. If you don't know what YICT is, or haven't tried it yourself - stop right here,
-and learn more about YICT before proceeding with the ICSDK2.
+This release provides low level services for the iCybie robot. It is not complete, nor does it have a working "personality". If you want a tool for customizing complete personalities, use [YICT](https://github.com/cartheur-cybie/yict). If you don't know what YICT is, or haven't tried it yourself - stop right here, and learn more about YICT before proceeding with the ICSDK2.
 
 Components that are working in-totality:
 
