@@ -1,6 +1,6 @@
-ICSDK2: Implementation Notes (C) 2002 ICybiePet
+## ICSDK2: Implementation Notes (C) 2002 ICybiePet
 
-## Overview
+### Overview
 
 This directory contains various technical notes on the hardware and software of the ICybie and ICSDK Library (ICLib2). Of particular interest is the Toshiba CPU (ICybie's main CPU), and how it is used in ICybie. For more details, see the source code to the ICLib2 (ICybie Library).
 
