@@ -16,34 +16,34 @@ Where one can revolve around the concept of modifying an iCybie:
 
 * [Super-iCybie](https://github.com/cartheur-cybie/Super-iCybie)
 
-## Version 2.00 - (ALPHA)
+## Version 2.00
 
-The SDK includes:
-* A full C compiler (with some caveats)
-* The "IcLib2" ICybie runtime
-* A very limited C runtime (ie. printf)
-* Full "C" source to IcLib2 runtime
-* Tools to upload programs to your Super ICybie using RS-232
-* File compatibility with the Silverlit downloader (-l.bin,-h.bin)
-* Samples
+This iCybie SDK includes:
+* A full C compiler, with some caveats.
+* The `iclib` iCybie runtime.
+* A limited C runtime.
+* Full `C` source to `iclib` runtime.
+* Tools to upload programs to your Super-iCybie using RS-232 or FT232RL.
+* File compatibility with the Silverlit downloader (`-l.bin`,`-h.bin`).
+* A collection of samples.
 
 All developer documentation is in the NOTES\*.TXT files.
 
 ### System ROM/Firmware:
 
-This release REQUIRES the *NEW* System ROM firmware + CROM for development. CROMINST 1.1 will upgrade the system ROM for you and install CROM. Cartridge programs created with the ICSDK will run in any ICybie with any of the three known versions of the system ROM.
+This release REQUIRES the *NEW* System ROM firmware + `CROM` for development. `CROMINST 1.1` will upgrade the system ROM for you and install `CROM`. Cartridge programs created with the SDK will run in any iCybie with any of the three known versions of the system ROM.
 
 _Cartridge only_
 
-The current ICSDK2 is designed to build `.ic3` programs (256KB cartridge programs that run in any ICybie). These are packaged as two `.BIN` files (`-L.BIN`,`-H.BIN`) for compatibility with the SilverLit Downloader as well as the `sicburn` utility. Note that `sicburn` is a slightly improved version of the old `sicup` utility.
+The current SDK is designed to build `.ic3` programs (256KB cartridge programs that run in any iCybie). These are packaged as two `.BIN` files (`-L.BIN`,`-H.BIN`) for compatibility with the SilverLit Downloader as well as the `sicburn` utility. Note that `sicburn` is a slightly improved version of the old `sicup` utility.
 
-The old `.IC0` format (of the SICSDK V1) is no longer supported. If you have previously used the SICSDK V1, you should un-install any `.IC0` programs before using the ICSDK2 (i.e. run `sicup restore.ic0`)
+The old `.IC0` format (of the `SICSDK` V1) is no longer supported. If you have previously used the `SICSDK` V1, you should un-install any `.IC0` programs before using the SDK (i.e. run `sicup restore.ic0`)
 
-Developing/installing programs into the system ROM (i.e. ICSUCK) is not (yet) supported in the SDK.
+Developing/installing programs into the system ROM (i.e. `ICSUCK`) is not supported in the SDK.
 
 ### What's in the SDK:
 
-Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be relative. You do not need to change `PATH`, `INCLUDE` or `LIB` variables.
+Install in any folder, all paths are set up to be relative. You do not need to change `PATH`, `INCLUDE`, or `LIB` variables.
 
     README.TXT - this file
 
@@ -61,7 +61,7 @@ Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be r
 
     LIB - library files
 	    LIB\CRT3.O - startup file for cartridge personality
-        LIB\ICLIB2.LIB - ICybie Library
+        LIB\ICLIB2.LIB - iCybie Library
         LIB\CARTIC3.LCF - link layout file for cartridge/IC3 file
 
     SAMPLES\
@@ -71,15 +71,15 @@ Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be r
         SAMPLES\TEST1 - general purpose high level test program
         SAMPLES\TEST0 - specialized low level test program
 
-        others, see SAMPLES\README.TXT
+        others, see SAMPLES\README.md
 
     NOTES\*.TXT - developer documentation
-        See NOTES\README.TXT
+        See NOTES\README.md
 
-    LIBSRC\*.* - source to "IcLib2" library
-        See LIBSRC\README.TXT
+    LIBSRC\*.* - source to `iclib` library
+        See LIBSRC\README.md
 
-    BINSRC\*.CPP - source to ICybiePet tools
+    BINSRC\*.CPP - sources to the tools
 
         NOTE: source is not available to many critical tools
     
@@ -107,13 +107,13 @@ Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be r
             [ to include sounds in your program ]
     adpcm66.exe - convert 16bit (8kHz) WAV files to 4bit ADPCM
 
-Tools without source are publicly available AFAIK, with copyright held by the appropriate parties. Tools with source are my own creation and are freeware in both source and binary forms.
+Tools without source are publicly available with copyright held by the appropriate parties. Tools with source are my own creation and are freeware in both source and binary forms.
 
 ### ICSDK2 ALPHA RELEASE NOTES:
 
-This release provides low level services for the iCybie robot. It is not complete, nor does it have a working "personality". If you want a tool for customizing complete personalities, use [YICT](https://github.com/cartheur-cybie/yict). If you don't know what YICT is, or haven't tried it yourself - stop right here, and learn more about YICT before proceeding with the ICSDK2.
+This release provides low-level services for the iCybie robot. It is not complete nor does it have a working _personality_. The tool for customizing complete personalities is [YICT](https://github.com/cartheur-cybie/yict). Take the time to learn about YICT before proceeding with this SDK.
 
-Components that are working in-totality:
+Components working in-totality:
 
 * Simple startup
 * Multi-layered initialization and library code
@@ -153,7 +153,7 @@ Partially complete: (need more work)
 * IR Obstacle logic - new - done - needs higher level logic
 * Simplified "raw" servo control - done
 
-NOT COMPLETE/NOT STARTED/NOT WORKING:
+Not complete and needing development:
 
 * Full 16 motor motion playback (missing head, neck, mouth, tail)
 * LED motion/action playback (and proper timing)
@@ -165,9 +165,9 @@ NOT COMPLETE/NOT STARTED/NOT WORKING:
 * Voice recording `**`
 * Leg calibration `**`
 * `**` => not necessary since you can remove the cartridge and use the default System ROM personality.
-* Optimizing routines (in particular frequently called interrupt routines). NOTE: need to remove RAM indirection from CROM.
+* Optimizing routines, in particular frequently called interrupt routines where RAM indirection needs to be removed from `CROM`.
 
-TODO MUCH LATER:
+TODO:
 
-* Watch-dog logic (as in watch-dog timer)
-* ICSUCK technology
+* Watch-dog logic, as in watch-dog timer.
+* `ICSUCK` technology.
