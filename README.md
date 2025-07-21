@@ -27,7 +27,7 @@ This iCybie SDK includes:
 * File compatibility with the Silverlit downloader (`-l.bin`,`-h.bin`).
 * A collection of samples.
 
-All developer documentation is in the NOTES\*.TXT files.
+All developer documentation is in the NOTES\*.md files.
 
 ### System ROM/Firmware:
 
@@ -45,7 +45,7 @@ Developing/installing programs into the system ROM (i.e. `ICSUCK`) is not suppor
 
 Install in any folder, all paths are set up to be relative. You do not need to change `PATH`, `INCLUDE`, or `LIB` variables.
 
-    README.TXT - this file
+    README.md - this file
 
     BIN\*.EXE - various tools (described below)
     ETC\*.* - extra files needed by compiler
@@ -73,7 +73,7 @@ Install in any folder, all paths are set up to be relative. You do not need to c
 
         others, see SAMPLES\README.md
 
-    NOTES\*.TXT - developer documentation
+    NOTES\*.md - developer documentation
         See NOTES\README.md
 
     LIBSRC\*.* - source to `iclib` library
