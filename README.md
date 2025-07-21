@@ -6,6 +6,12 @@ Software development kit for the iCybie. Repository navigation:
 * [notes](/notes/README.md)
 * [samples](/samples/README.md)
 
+Also there are companion repositories for other features:
+
+* [himage](https://github.com/cartheur-cybie/himage)
+* [icaud](https://github.com/cartheur-cybie/icaud)
+* [yict](https://github.com/cartheur-cybie/yict)
+
 ## Version 2.0 - (ALPHA)
 
 The SDK includes:
