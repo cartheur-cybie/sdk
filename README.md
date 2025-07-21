@@ -12,7 +12,11 @@ Also there are companion repositories for other features:
 * [icaud](https://github.com/cartheur-cybie/icaud)
 * [yict](https://github.com/cartheur-cybie/yict)
 
-## Version 2.0 - (ALPHA)
+Where one can revolve around the concept of modifying an iCybie:
+
+* [Super-iCybie](https://github.com/cartheur-cybie/Super-iCybie)
+
+## Version 2.00 - (ALPHA)
 
 The SDK includes:
 * A full C compiler (with some caveats)
