@@ -41,9 +41,9 @@ The old `.IC0` format (of the `SICSDK` V1) is no longer supported. If you have p
 
 Developing/installing programs into the system ROM (i.e. `ICSUCK`) is not supported in the SDK.
 
-### What's in the SDK:
+### What's in this SDK
 
-Install in any folder, all paths are set up to be relative. You do not need to change `PATH`, `INCLUDE`, or `LIB` variables.
+Clone the repository into any folder as all paths are relative. You do not need to change `PATH`, `INCLUDE`, or `LIB` variables.
 
     README.md - this file
 
