@@ -1,6 +1,10 @@
 # sdk
 
-Software development kit for the iCybie. IC SDK = Super ICybie Software Development Kit
+Software development kit for the iCybie. Repository navigation:
+
+* [`libsrc`](/libsrc/README.md)
+* [`notes`](/notes/README.md)
+* [`samples`](/samples/README.md)
 
 ## Version 2.0 - (ALPHA)
 
