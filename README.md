@@ -2,7 +2,7 @@
 
 Software development kit for the iCybie. IC SDK = Super ICybie Software Development Kit
 
-## Version 2.0 - ALPHA RELEASE
+## Version 2.0 - (ALPHA)
 
 The SDK includes:
 * A full C compiler (with some caveats)
@@ -29,7 +29,7 @@ Developing/installing programs into the system ROM (i.e. ICSUCK) is not (yet) su
 
 ### What's in the SDK:
 
-Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be relative. You do not need to change PATH, INCLUDE or LIB variables.
+Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be relative. You do not need to change `PATH`, `INCLUDE` or `LIB` variables.
 
     README.TXT - this file
 
@@ -69,7 +69,6 @@ Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be r
 
         NOTE: source is not available to many critical tools
     
---------------------------------------------------
 BIN TOOLS:
     NOTE: most tools are automatically handled for you
         by the standard makefile "INC\ICSTD.MAK"
@@ -105,75 +104,61 @@ This release provides low level services for the ICybie robot. It is not complet
 If you want a tool for customizing complete personalities, use YICT. If you don't know what YICT is, or haven't tried it yourself - stop right here,
 and learn more about YICT before proceeding with the ICSDK2.
 
-Components that are working 100%:
+Components that are working in-totality:
 
-    Simple startup
-    Multi-layered initialization and library code
-
-    Serial initialization (with semi-selectable baud rates)
-    General timer services
-    System ROM version detection (compensates for old system ROMs)
-
-    LED playback (eyes)
-    AUDIO playback (synchronous)
-    Reusing 30 sounds from System ROM
-    Poll Sensors (10 bits)
-
-    E2PROM Storage Read/Write
-    Simple flash ROM writer [not generally useful or recommended]
-
-    IR receive logic (compatible with IR remote, existing robots and charger)
-    IR transmit logic
-    IR communication to RSC-300 (voice commands)
-
-    Low level PWM motor control for 16 motors (12 legs + head/neck/mouth/tail)
-    ADC sampling for 12 legs, battery-voltage and light-level
-    Leg - abstract positions use E2PROM calibration info from last calibration
-
-    Motion playback control (legs only)
-    Posture control
-    Action playback control
-
-    All standard motions (reusing system ROM for space savings)
-    All standard actions
+* Simple startup
+* Multi-layered initialization and library code
+* Serial initialization (with semi-selectable baud rates)
+* General timer services
+* System ROM version detection (compensates for old system ROMs)
+* LED playback (eyes)
+* AUDIO playback (synchronous)
+* Reusing 30 sounds from System ROM
+* Poll Sensors (10 bits)
+* E2PROM Storage Read/Write
+* Simple flash ROM writer [not generally useful or recommended]
+* IR receive logic (compatible with IR remote, existing robots and charger)
+* IR transmit logic
+* IR communication to RSC-300 (voice commands)
+* Low level PWM motor control for 16 motors (12 legs + head/neck/mouth/tail)
+* ADC sampling for 12 legs, battery-voltage and light-level
+* Leg - abstract positions use E2PROM calibration info from last calibration
+* Motion playback control (legs only)
+* Posture control
+* Action playback control
+* All standard motions (reusing system ROM for space savings)
+* All standard actions
 
 Partially complete: (need more work)
 
-    Simple "raw" servo loop (overshoots a lot)
-
-    Basic motion playback for legs and sounds
-
-    Shutdown/power down - done but not tested
-
-    Using standard motion data (with exceptions) - done
-    Posture control - done
-    Action playback - done
-    Standard actions (290 of 'em) - done
-
-    Voice command info and commands - done
-
-    IR TX logic - done (and fixed)
-    IR Obstacle logic - old emulate - done (as sample)
-    IR Obstacle logic - new - done - needs higher level logic
-    Simplified "raw" servo control - done
+* Simple "raw" servo loop (overshoots a lot)
+* Basic motion playback for legs and sounds
+* Shutdown/power down - done but not tested
+* Using standard motion data (with exceptions) - done
+* Posture control - done
+* Action playback - done
+* Standard actions (290 of 'em) - done
+* Voice command info and commands - done
+* IR TX logic - done (and fixed)
+* IR Obstacle logic - old emulate - done (as sample)
+* IR Obstacle logic - new - done - needs higher level logic
+* Simplified "raw" servo control - done
 
 NOT COMPLETE/NOT STARTED/NOT WORKING:
-    Full 16 motor motion playback (missing head, neck, mouth, tail)
-    LED motion/action playback (and proper timing)
-    Tilt handling
-    Clap detect
-    BasicDog personality
-    Leg jam detection (faster, variable tolerance)
-    Power up after power-down
 
-    Voice recording (**)
-    Leg calibration (**)
-        (**) => not necessary since you can remove the cartridge and
-            use the default System ROM personality
-
-    Optimizing routines (in particular frequently called interrupt routines)
-        NOTE: need to remove RAM indirection from CROM
+* Full 16 motor motion playback (missing head, neck, mouth, tail)
+* LED motion/action playback (and proper timing)
+* Tilt handling
+* Clap detect
+* BasicDog personality
+* Leg jam detection (faster, variable tolerance)
+* Power up after power-down
+* Voice recording `**`
+* Leg calibration `**`
+* `**` => not necessary since you can remove the cartridge and use the default System ROM personality.
+* Optimizing routines (in particular frequently called interrupt routines). NOTE: need to remove RAM indirection from CROM.
 
 TODO MUCH LATER:
+
 * Watch-dog logic (as in watch-dog timer)
 * ICSUCK technology
