@@ -69,9 +69,7 @@ Install in any folder (e.g.: C:\ICSDK recommended). All paths are set up to be r
 
         NOTE: source is not available to many critical tools
     
-BIN TOOLS:
-    NOTE: most tools are automatically handled for you
-        by the standard makefile "INC\ICSTD.MAK"
+`BIN TOOLS`: Most tools are automatically handled for you by the standard makefile "INC\ICSTD.MAK"
 
     NMAKE.EXE - Microsoft NMAKE utility
 
