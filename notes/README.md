@@ -1,13 +1,18 @@
-## ICSDK2: Implementation Notes (C) 2002 ICybiePet
+## ICSDK2: Implementation Notes
 
 ### Overview
 
-This directory contains various technical notes on the hardware and software of the ICybie and ICSDK Library (ICLib2). Of particular interest is the Toshiba CPU (ICybie's main CPU), and how it is used in ICybie. For more details, see the source code to the ICLib2 (ICybie Library).
+This directory contains various technical notes on the hardware and software of the iCybie and iCSDK Library (iCLib2). Of particular interest is the Toshiba CPU, iCybie's main CPU, and how it is utilized. For more details, see the [source](/binsrc/README.md) code to the iCLib2 [library](/lib/iclib2.lib).
 
 ### Hardware:
 
-The ICybie has 3 CPUs, the main Toshiba CPU, a SunSite daughter CPU for sound playback (and other features) and finally the RSC-300 voice
-recognition CPU (in ICybie's head). The main features are in the Toshiba CPU, which has 8KB of RAM, 256KB of system ROM, 256KB of optional cartridge ROM, 128 bytes of E2PROM, and many peripherals including interfaces to the other two CPUs.
+The iCybie has three CPUs:
+
+* The main Toshiba CPU,
+* A SunSite daughter CPU for sound playback (and other features) and,
+* A RSC-300 voice recognition CPU (in iCybie's head).
+
+The main features are in the Toshiba CPU, which has 8KB of RAM, 256KB of system ROM, 256KB of optional cartridge ROM, 128 bytes of E2PROM, and many peripherals including interfaces to the other two CPUs.
 
 The main CPU can controlled by writing programs that run from the cartridge. The ICSDK provides the tools, library and samples for these programs.
 
