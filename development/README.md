@@ -4,9 +4,9 @@ _iCybie Software Development Kit:_ A set of code to enable development of iCybie
 
 ### Overview
 
-This directory contains various technical notes on the hardware and software of the iCybie and iCSDK Library (iCLib2). Of particular interest is the Toshiba CPU, iCybie's main CPU, and how it is utilized. For more details, see the [source](/binsrc/README.md) code to the iCLib2 [library](/lib/iclib2.lib).
+This directory contains various technical notes for developmenet against the hardware for new software deployed on the iCybie. Of particular interest is the Toshiba CPU, iCybie's main CPU, and how it is utilized. For more details, see the [source](/binsrc/README.md) code to the iCLib2 [library](/lib/iclib2.lib).
 
-### Hardware:
+### Hardware
 
 The iCybie has three CPUs:
 
