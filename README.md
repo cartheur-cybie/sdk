@@ -109,7 +109,7 @@ Clone the repository into any folder as all paths are relative. You do not need 
 
 Tools without source are publicly available with copyright held by the appropriate parties. Tools with source are my own creation and are freeware in both source and binary forms.
 
-### Release Notes:
+### Release Notes
 
 This release provides low-level services for the iCybie robot. It is not complete nor does it have a working _personality_. The tool for customizing complete personalities is [YICT](https://github.com/cartheur-cybie/yict). Take the time to learn about YICT before proceeding with this SDK.
 
