@@ -1,4 +1,4 @@
-## ICSDK Samples
+## Samples
 
 _Trivial examples_
 
