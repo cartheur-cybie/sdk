@@ -1,4 +1,6 @@
-## ICSDK2: Implementation Notes
+## iCSDK
+
+_iCybie Software Development Kit:_ A set of code to enable development of iCybie programs.
 
 ### Overview
 
