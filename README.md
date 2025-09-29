@@ -3,7 +3,7 @@
 Software development kit for the iCybie. Repository navigation:
 
 * [`libsrc`](/libsrc/README.md)
-* [notes](/notes/README.md)
+* [technical-notes](/development/README.md)
 * [samples](/samples/README.md)
 
 Also there are companion repositories for other features:
