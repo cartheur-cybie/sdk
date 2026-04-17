@@ -4,10 +4,17 @@
 
 #include "siclib.h"
 
+#ifndef _WIN32
+#include <errno.h>
+#include <fcntl.h>
+#include <termios.h>
+#endif
+
 FILE* pfSicLog = NULL;
 
 HANDLE OpenSerial(int iPort)
 {
+#ifdef _WIN32
     char szPort[32];
     sprintf(szPort, "COM%d", iPort);
 
@@ -23,15 +30,37 @@ HANDLE OpenSerial(int iPort)
         fprintf(pfSicLog, "Open Serial %s returned $%x\n", szPort, h);
 
     return h;
+#else
+    char envName[32];
+    sprintf(envName, "SIC_COM%d", iPort);
+
+    const char* szPort = getenv(envName);
+    if (szPort == NULL || szPort[0] == '\0')
+    {
+        static char defaultPort[64];
+        sprintf(defaultPort, "/dev/ttyS%d", iPort - 1);
+        szPort = defaultPort;
+    }
+
+    int h = open(szPort, O_RDWR | O_NOCTTY);
+    if (pfSicLog != NULL)
+        fprintf(pfSicLog, "Open Serial %s returned %d\n", szPort, h);
+    return h;
+#endif
 }
 
 void CloseSerial(HANDLE hSerial)
 {
+#ifdef _WIN32
     CloseHandle(hSerial);
+#else
+    close(hSerial);
+#endif
 }
 
 static bool SetCommDefaultsPart1(HANDLE hSerial, int baud)
 {
+#ifdef _WIN32
 	DCB        dcb;
     memset(&dcb, 0, sizeof(DCB));
 	dcb.DCBlength = sizeof(DCB);
@@ -53,13 +82,44 @@ static bool SetCommDefaultsPart1(HANDLE hSerial, int baud)
     if (!SetCommState(hSerial, &dcb))
         return false;
     return true;
+#else
+    struct termios tty;
+    memset(&tty, 0, sizeof(tty));
+    if (tcgetattr(hSerial, &tty) != 0)
+        return false;
+
+    speed_t speed;
+    if (baud == 9600)
+        speed = B9600;
+    else if (baud == 38400)
+        speed = B38400;
+    else
+        return false;
+
+    cfsetospeed(&tty, speed);
+    cfsetispeed(&tty, speed);
+
+    tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;
+    tty.c_cflag |= CLOCAL | CREAD;
+    tty.c_cflag &= ~(PARENB | PARODD | CSTOPB | CRTSCTS);
+    tty.c_iflag = IGNPAR;
+    tty.c_oflag = 0;
+    tty.c_lflag = 0;
+    tty.c_cc[VMIN] = 0;
+    tty.c_cc[VTIME] = 0;
+
+    if (tcsetattr(hSerial, TCSANOW, &tty) != 0)
+        return false;
+    return true;
+#endif
 }
 
 bool SetCommDefaults(HANDLE hSerial)
 {
-    if (!SetCommDefaultsPart1(hSerial, CBR_9600))
+    if (!SetCommDefaultsPart1(hSerial, 9600))
         return false;
 
+#ifdef _WIN32
     // set no timeouts
     COMMTIMEOUTS to;
     memset(&to, 0, sizeof(to));
@@ -70,6 +130,9 @@ bool SetCommDefaults(HANDLE hSerial)
     // purge all
     PurgeComm(hSerial,
       PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+#else
+    tcflush(hSerial, TCIOFLUSH);
+#endif
     return true;
 }
 
@@ -79,14 +142,30 @@ void PurgeSerial(HANDLE hSerial)
     while (1)
     {
 	    BYTE b;
-	    DWORD cbRead;
+#ifdef _WIN32
+	    DWORD cbRead = 0;
         if (!ReadFile(hSerial, &b, 1, &cbRead, NULL))
         {
 	        fprintf(stderr, "FATAL: Purge failed for serial port\n");
             exit(-1);
         }
-        if (cbRead == 0)
+#else
+        int cbRead = read(hSerial, &b, 1);
+        if (cbRead < 0)
+        {
+            if (errno == EAGAIN || errno == EWOULDBLOCK)
+                cbRead = 0;
+            else
+            {
+                fprintf(stderr, "FATAL: Purge failed for serial port\n");
+                exit(-1);
+            }
+        }
+#endif
+        if (cbRead <= 0)
+        {
             break;  // empty
+        }
 	    if (pfSicLog != NULL)
 	        fprintf(pfSicLog, "PURGING byte $%02X\n", b);
     }
@@ -97,7 +176,8 @@ void PurgeSerial(HANDLE hSerial)
 
 bool PeekSerialByte(HANDLE hSerial, BYTE& bRet) // no logging
 {
-	DWORD cbRead;
+#ifdef _WIN32
+	DWORD cbRead = 0;
     if (!ReadFile(hSerial, &bRet, 1, &cbRead, NULL))
     {
 	    fprintf(stderr, "FATAL: ReadFile failed for serial port\n");
@@ -105,6 +185,18 @@ bool PeekSerialByte(HANDLE hSerial, BYTE& bRet) // no logging
     }
     if (cbRead == 1)
         return true;
+#else
+    int cbRead = read(hSerial, &bRet, 1);
+    if (cbRead < 0)
+    {
+        if (errno == EAGAIN || errno == EWOULDBLOCK)
+            return false;
+        fprintf(stderr, "FATAL: read failed for serial port\n");
+        exit(-1);
+    }
+    if (cbRead == 1)
+        return true;
+#endif
     return false;   // no data
 }
 
@@ -132,12 +224,26 @@ BYTE GetSerialByte(HANDLE hSerial)
 // code assumes same byte ordering (Intel = ICybie)
 void SendSerialBytes(HANDLE hSerial, const BYTE* pb, int cb)
 {
-    DWORD cbWrite;
+#ifdef _WIN32
+    DWORD cbWrite = 0;
     if (!WriteFile(hSerial, pb, cb, &cbWrite, NULL) || cbWrite != cb)
     {
         fprintf(stderr, "FATAL: WriteFile failed for serial port\n");
         exit(-1);
     }
+#else
+    int cbWrite = 0;
+    while (cbWrite < cb)
+    {
+        int now = write(hSerial, pb + cbWrite, cb - cbWrite);
+        if (now <= 0)
+        {
+            fprintf(stderr, "FATAL: write failed for serial port\n");
+            exit(-1);
+        }
+        cbWrite += now;
+    }
+#endif
     if (pfSicLog != NULL)
     {
 	    for (int ib = 0; ib < cb; ib++)
@@ -224,8 +330,8 @@ BYTE GetErrorCount(HANDLE hSerial)
 
 void SetAddress(HANDLE hSerial, long address)
 {
-	if (pfSicLog != NULL)
-		fprintf(pfSicLog, "SETADDRESS $%06X\n", address);
+		if (pfSicLog != NULL)
+			fprintf(pfSicLog, "SETADDRESS $%06lX\n", address);
 	PurgeSerial(hSerial);
     SendSerialString(hSerial, "!A");
     assert((address & 0xFFFFFE) == address);
@@ -358,7 +464,7 @@ bool SetFastCrom(HANDLE hSerial)
 
     Sleep(50);
 
-    if (!SetCommDefaultsPart1(hSerial, CBR_38400))
+    if (!SetCommDefaultsPart1(hSerial, 38400))
         return false;
 
     Sleep(50);

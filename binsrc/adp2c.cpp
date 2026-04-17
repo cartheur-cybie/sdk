@@ -1,15 +1,26 @@
 // aud2c.cpp
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
+#include "std.h"
 
 typedef unsigned char byte;
 
 void GetName(char* szOut, const char* szFile)
 {
-    _splitpath(szFile, NULL, NULL, szOut, NULL);
+    const char* pName = strrchr(szFile, '/');
+    const char* pName2 = strrchr(szFile, '\\');
+    if (pName2 != NULL && (pName == NULL || pName2 > pName))
+        pName = pName2;
+    if (pName == NULL)
+        pName = szFile;
+    else
+        pName++;
+
+    const char* pDot = strrchr(pName, '.');
+    size_t cch = (pDot != NULL) ? (size_t)(pDot - pName) : strlen(pName);
+    if (cch >= (size_t)_MAX_PATH)
+        cch = _MAX_PATH - 1;
+    memcpy(szOut, pName, cch);
+    szOut[cch] = '\0';
 }
 
 
@@ -55,7 +66,7 @@ void Process(FILE* pfOut, const char* szFile, int& cbFirstSeg)
         u.l = cbAud;
         assert(u.rgb[2] == 0);
         assert(u.rgb[3] == 0);
-        fprintf(pfOut, "\t0x%02x, 0x%02x, 0, 0, // %d bytes\n",
+        fprintf(pfOut, "\t0x%02x, 0x%02x, 0, 0, // %ld bytes\n",
             u.rgb[0], u.rgb[1], cbAud);
     }
     
@@ -96,4 +107,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

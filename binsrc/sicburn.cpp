@@ -6,9 +6,59 @@
 #include "siclib.h"
 
 #include <ctype.h>
+#ifdef _WIN32
 #include <conio.h>  // for keyboard polling
+#else
+#include <sys/select.h>
+#include <termios.h>
+#include <unistd.h>
+#endif
 
-#include <windows.h> // for Sleep
+#ifndef _WIN32
+static bool g_stdinRaw = false;
+static struct termios g_stdinSaved;
+
+static void EnterRawStdin()
+{
+    if (g_stdinRaw)
+        return;
+    if (tcgetattr(STDIN_FILENO, &g_stdinSaved) != 0)
+        return;
+    struct termios raw = g_stdinSaved;
+    raw.c_lflag &= ~(ICANON | ECHO);
+    raw.c_cc[VMIN] = 0;
+    raw.c_cc[VTIME] = 0;
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &raw) == 0)
+        g_stdinRaw = true;
+}
+
+static void LeaveRawStdin()
+{
+    if (!g_stdinRaw)
+        return;
+    tcsetattr(STDIN_FILENO, TCSANOW, &g_stdinSaved);
+    g_stdinRaw = false;
+}
+
+static bool KeyboardHit()
+{
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
+}
+
+static int KeyboardGetCh()
+{
+    unsigned char ch = 0;
+    if (read(STDIN_FILENO, &ch, 1) == 1)
+        return ch;
+    return -1;
+}
+#endif
 
 static void PrUsage()
 {
@@ -136,7 +186,7 @@ int main(int argc, char* argv[])
         exit(-1);
     }
     
-    assert(cbImage > 0 && cbImage <= sizeof(g_rgbImage));
+    assert(cbImage > 0 && (size_t)cbImage <= sizeof(g_rgbImage));
 
     //BLOCK: read in image
     if (szExt != NULL)
@@ -157,6 +207,7 @@ int main(int argc, char* argv[])
         sprintf(szInFile, "%s-h.bin", szInputSource);
         if (!LoadFile(szInFile, g_rgbHalf, cbImage/2))
             return -1;
+        int i;
         for (i = 0; i < cbImage/2; i++)
             g_rgbImage[i*2+1] = g_rgbHalf[i];
     }
@@ -203,7 +254,7 @@ int main(int argc, char* argv[])
 
 
     if (bVerbose)
-	    printf("sending from '%s' to ROM at $%06X (%dKB)%s\n",
+	    printf("sending from '%s' to ROM at $%06lX (%dKB)%s\n",
 	         szInputSource, baseAddr, cbImage/1024,
              bSmart ? " - SMART" : "");
 
@@ -213,7 +264,9 @@ int main(int argc, char* argv[])
     {
 
         if (bVerbose)
-            printf("Block at $%06X : ", addrNow);
+        {
+            printf("Block at $%06lX : ", addrNow);
+        }
 
 	    BYTE bErr;
 	    if ((bErr = GetErrorCount(hSerial)) != 0)
@@ -307,6 +360,9 @@ int main(int argc, char* argv[])
         if (bVerbose)
 	        printf("(hit Ctrl+C to stop serial dump)\n");
         bool bRun = true;
+#ifndef _WIN32
+        EnterRawStdin();
+#endif
         while (bRun)
         {
             BYTE b;
@@ -317,17 +373,33 @@ int main(int argc, char* argv[])
                     bRun = false;  // Ctrl-Z to abort
 		        printf("%c", b);
             }
-            if (_kbhit())
+            bool hasKey = false;
+#ifdef _WIN32
+            hasKey = _kbhit() != 0;
+#else
+            hasKey = KeyboardHit();
+#endif
+            if (hasKey)
             {
-                b = _getch();
-				SendSerialBytes(hSerial, &b, 1);
+                int ch;
+#ifdef _WIN32
+                ch = _getch();
+#else
+                ch = KeyboardGetCh();
+#endif
+                if (ch >= 0)
+                {
+                    b = (BYTE)ch;
+				    SendSerialBytes(hSerial, &b, 1);
+                }
             }
             Sleep(50);  // don't eat up all the CPU
         }
+#ifndef _WIN32
+        LeaveRawStdin();
+#endif
     }
 	CloseSerial(hSerial);
 	
     return 0;
 }
-
-

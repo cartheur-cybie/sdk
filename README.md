@@ -5,6 +5,7 @@ Software development kit for the iCybie. Repository navigation:
 * [`libsrc`](/libsrc/README.md)
 * [technical-notes](/development/README.md)
 * [samples](/samples/README.md)
+* [linux-workflow](/docs/linux.md)
 
 Also there are companion repositories for other features:
 
@@ -26,6 +27,16 @@ This iCybie SDK includes:
 * Tools to upload programs to your Super-iCybie using RS-232 or FT232RL.
 * File compatibility with the Silverlit downloader (`-l.bin`,`-h.bin`).
 * A collection of samples.
+
+## Linux-first workflow
+
+This repository supports Linux as a first-class development environment:
+
+* Native Linux binaries are used for open-source host tools from `binsrc` (`sicburn`, `sicgrab`, `convic3`, `splitic3`, `mergeic3`, `adp2c`).
+* Wine is only used for closed-source compiler/linker toolchain binaries.
+
+See [docs/linux.md](/docs/linux.md) for installation, build, and flashing instructions.
+The same document also tracks the current branch's known Wine/`CC900` compatibility blocker.
 
 All developer documentation is in the NOTES\*.md files.
 

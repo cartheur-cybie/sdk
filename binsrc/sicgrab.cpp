@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
     {
 	    BYTE rgbData[BLOCK_SIZE];
         long address = base_address + BLOCK_SIZE * iBlock;
-        printf("BLOCK %2d $%06X\n", iBlock, address);
+        printf("BLOCK %2d $%06lX\n", iBlock, address);
         BYTE bErr = GetErrorCount(hSerial);
         if (bErr != bLastErr)
         {
@@ -128,5 +128,4 @@ int main(int argc, char* argv[])
     printf("saved image to to %s\n", szOutFile);
     return 0;
 }
-
 
